@@ -74,7 +74,7 @@ def messenger_post():
 
                 # Let's forward the message to the Wit.ai Bot Engine
                 # We handle the response in the function send()
-                client.run_actions(session_id=str(fb_id), message=str(text))
+                client.run_actions(session_id=fb_id.decode("utf-8"), message=text.decode("utf-8"))
     else:
         # Returned another event
         return 'Received Different Event'
@@ -85,8 +85,8 @@ def fb_message(sender_id, text):
     Function for returning response to messenger
     """
     data = {
-        'recipient': {'id': sender_id.decode("utf-8") },
-        'message': {'text': text.decode("utf-8")}
+        'recipient': {'id': sender_id },
+        'message': {'text': text}
     }
     # Setup the query string with your PAGE TOKEN
     qs = 'access_token=' + FB_PAGE_TOKEN
