@@ -93,7 +93,7 @@ def fb_message(sender_id, text):
     qs = 'access_token=' + FB_PAGE_TOKEN
     # Send POST request to messenger
     resp = requests.post('https://graph.facebook.com/me/messages?' + qs, json=data)
-    return resp.content
+    return str(resp.content)
 
 
 def first_entity_value(entities, entity):
