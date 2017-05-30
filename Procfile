@@ -1,1 +1,1 @@
-web: gunicorn chatBot.wsgi --log-file -
+web: gunicorn chatBot:app --log-file -
