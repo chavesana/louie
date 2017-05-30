@@ -57,6 +57,7 @@ def messenger_post():
     """
     Handler for webhook (currently for postback and messages)
     """
+    print("messenger post func called")
     data = request.json
     if data['object'] == 'page':
         for entry in data['entry']:
