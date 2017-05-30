@@ -79,6 +79,9 @@ def messenger_post():
         return 'Received Different Event'
     return None
 
+@app.route('/')
+def index():
+    return "Hello World"
 
 def fb_message(sender_id, text):
     """
@@ -145,5 +148,5 @@ client = Wit(access_token=WIT_TOKEN, actions=actions)
 
 if __name__ == '__main__':
     # Run Server
-    print(os.environ['PORT'])
-    app.run(host='0.0.0.0', port=os.environ['PORT'])
+    # print(os.environ['PORT'])
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
