@@ -2,7 +2,7 @@
   "name": "Chatbot",
   "description": "A Simple NAU chatbot.",
   "image": "heroku/python",
-  "repository": "https://github.com/heroku/python-getting-started",
+  "repository": "https://github.com/tthatcher95/chatBot",
   "keywords": ["python", "django" ],
   "addons": [ "heroku-postgresql" ]
 }
