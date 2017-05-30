@@ -66,15 +66,18 @@ def messenger_post():
             if messages[0]:
                 # Get the first message
                 message = messages[0]
+
                 # Yay! We got a new message!
                 # We retrieve the Facebook user ID of the sender
                 fb_id = message['sender']['id']
                 # We retrieve the message content
                 text = message['message']['text']
 
+                print("TEXT type: ", type(text))
+                print("ID type: ", type(fb_id))
                 # Let's forward the message to the Wit.ai Bot Engine
                 # We handle the response in the function send()
-                client.run_actions(session_id=fb_id.decode("utf-8"), message=text.decode("utf-8"))
+                client.run_actions(session_id=fb_id, message=text)
     else:
         # Returned another event
         return 'Received Different Event'
@@ -92,7 +95,8 @@ def fb_message(sender_id, text):
     qs = 'access_token=' + FB_PAGE_TOKEN
     # Send POST request to messenger
     resp = requests.post('https://graph.facebook.com/me/messages?' + qs, json=data)
-    return str(resp.content)
+    print("content type:", type(resp.content))
+    return resp.content.decode("utf-8")
 
 
 def first_entity_value(entities, entity):
