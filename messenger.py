@@ -72,7 +72,6 @@ def messenger_post():
                 # We retrieve the message content
                 text = message['message']['text']
 
-                print(text)
                 # Let's forward the message to the Wit.ai Bot Engine
                 # We handle the response in the function send()
                 client.run_actions(session_id=str(fb_id), message=str(text))
@@ -116,7 +115,7 @@ def send(request, response):
     fb_id = request['session_id']
     text = response['text']
     # send message
-    fb_message(fb_id, text)
+    fb_message(str(fb_id), str(text))
 
 
 def get_forecast(request):
