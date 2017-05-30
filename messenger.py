@@ -85,8 +85,8 @@ def fb_message(sender_id, text):
     Function for returning response to messenger
     """
     data = {
-        'recipient': {'id': str(sender_id)},
-        'message': {'text': str(text)}
+        'recipient': {'id': sender_id.decode("utf-8") },
+        'message': {'text': text.decode("utf-8")}
     }
     # Setup the query string with your PAGE TOKEN
     qs = 'access_token=' + FB_PAGE_TOKEN
