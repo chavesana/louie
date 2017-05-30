@@ -123,7 +123,7 @@ def send(request, response):
     print("TEXT type in send: ", type(text))
     print("ID type in send: ", type(fb_id))
     # send message
-    fb_message(fb_id, text)
+    fb_message(fb_id, text.decode("utf-8"))
 
 
 def get_forecast(request):
