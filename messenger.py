@@ -82,9 +82,9 @@ def messenger_post():
                     res = client.message(text)
                     print('MESSAGE RESPONSE = ', res)
 
-                    if 'wikipedia_search_query' in res['entries'].keys():
+                    if 'wikipedia_search_query' in res['entities'].keys():
                         print('performing wolfram search-------------')
-                        query_result = wolfclient.query(res['entries']['wikipedia_search_query']['value'])
+                        query_result = wolfclient.query(res['entities']['wikipedia_search_query']['value'])
                         print(query_result)
                         fb_message(fb_id, str(query_result['pod'][1]['subpod']['plaintext']))
                     else:
