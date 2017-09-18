@@ -76,6 +76,8 @@ def messenger_post():
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     print('MESSAGE RESPONSE = ', client.message(text))
+                    fb_message(fb_id, text)
+
             except Exception as e:
                 print(e)
     else:
