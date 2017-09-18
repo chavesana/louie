@@ -66,7 +66,7 @@ def messenger_post():
             if messages[0]:
                 # Get the first message
                 message = messages[0]
-
+                print(message)
                 # Yay! We got a new message!
                 # We retrieve the Facebook user ID of the sender
                 fb_id = message['sender']['id']
@@ -118,7 +118,6 @@ def send(request, response):
     # We use the fb_id as equal to session_id
     fb_id = request['session_id']
     text = response['text']
-
 
     print("TEXT type in send: ", type(text))
     print("ID type in send: ", type(fb_id))
