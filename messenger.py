@@ -91,6 +91,7 @@ def messenger_post():
                         fb_message(fb_id, str(res['entities']))
 
             except Exception as e:
+                print('ERROR ==================================')
                 print(e)
     else:
         # Returned another event
