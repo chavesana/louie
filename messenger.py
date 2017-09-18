@@ -77,7 +77,7 @@ def messenger_post():
                     # We handle the response in the function send()
                     res = client.message(text)
                     print('MESSAGE RESPONSE = ', res)
-                    fb_message(fb_id, res['entities'])
+                    fb_message(fb_id, str(res['entities']))
 
             except Exception as e:
                 print(e)
@@ -90,7 +90,6 @@ def fb_message(sender_id, text):
     """
     Function for returning response to messenger
     """
-    print('in fb_message ==============================')
     data = {
         'recipient': {'id': sender_id },
         'message': {'text': text}
