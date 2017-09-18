@@ -54,6 +54,7 @@ def messenger_webhook():
 # Facebook Messenger POST Webhook
 @app.get('/message')
 def messenger_post():
+    print('/message =========')
 
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
