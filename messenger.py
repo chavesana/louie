@@ -63,21 +63,24 @@ def messenger_post():
         for entry in data['entry']:
             # get all the messages
             messages = entry['messaging']
-            if messages[0]:
-                # Get the first message
-                message = messages[0]
-                print(message)
-                # Yay! We got a new message!
-                # We retrieve the Facebook user ID of the sender
-                fb_id = message['sender']['id']
-                # We retrieve the message content
-                text = message['message']['text']
+            try:
+                if messages[0]:
+                    # Get the first message
+                    message = messages[0]
+                    print(message)
+                    # Yay! We got a new message!
+                    # We retrieve the Facebook user ID of the sender
+                    fb_id = message['sender']['id']
+                    # We retrieve the message content
+                    text = message['message']['text']
 
-                print("TEXT type: ", type(text))
-                print("ID type: ", type(fb_id))
-                # Let's forward the message to the Wit.ai Bot Engine
-                # We handle the response in the function send()
-                client.run_actions(session_id=fb_id, message=text)
+                    print("TEXT type: ", type(text))
+                    print("ID type: ", type(fb_id))
+                    # Let's forward the message to the Wit.ai Bot Engine
+                    # We handle the response in the function send()
+                    client.run_actions(session_id=fb_id, message=text)
+            except Exception as e:
+                print(e)
     else:
         # Returned another event
         return 'Received Different Event'
