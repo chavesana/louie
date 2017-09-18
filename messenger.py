@@ -50,12 +50,6 @@ def messenger_webhook():
     else:
         return 'Invalid Request or Verification Token'
 
-
-# Facebook Messenger POST Webhook
-@app.post('/message')
-def messenger_post():
-    print('/message =========')
-
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
 def messenger_post():
@@ -93,6 +87,7 @@ def fb_message(sender_id, text):
     """
     Function for returning response to messenger
     """
+    print('in fb_message ==============================')
     data = {
         'recipient': {'id': sender_id },
         'message': {'text': text}
@@ -121,6 +116,7 @@ def send(request, response):
     """
     Sender function
     """
+    print('in send ==============================')
     # We use the fb_id as equal to session_id
     fb_id = request['session_id']
     text = response['text']
