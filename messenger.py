@@ -52,7 +52,7 @@ def messenger_webhook():
 
 
 # Facebook Messenger POST Webhook
-@app.get('/message')
+@app.post('/message')
 def messenger_post():
     print('/message =========')
 
@@ -79,9 +79,6 @@ def messenger_post():
                     fb_id = message['sender']['id']
                     # We retrieve the message content
                     text = message['message']['text']
-
-                    print("TEXT type: ", type(text))
-                    print("ID type: ", type(fb_id))
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     client.run_actions(session_id=fb_id, message=text)
@@ -128,8 +125,7 @@ def send(request, response):
     fb_id = request['session_id']
     text = response['text']
 
-    print("TEXT type in send: ", type(text))
-    print("ID type in send: ", type(fb_id))
+    print("text ===== ", text)
     # send message
     fb_message(fb_id, text.decode("utf-8"))
 
