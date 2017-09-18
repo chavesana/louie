@@ -52,6 +52,10 @@ def messenger_webhook():
 
 
 # Facebook Messenger POST Webhook
+@app.get('/message')
+def messenger_post():
+
+# Facebook Messenger POST Webhook
 @app.post('/webhook')
 def messenger_post():
     """
@@ -59,6 +63,7 @@ def messenger_post():
     """
     print("messenger post func called")
     data = request.json
+    print("data------\n",data)
     if data['object'] == 'page':
         for entry in data['entry']:
             # get all the messages
