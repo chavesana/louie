@@ -3,3 +3,5 @@ pymongo
 requests
 bottle
 wit
+python-google-places
+wolframalpha
