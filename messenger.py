@@ -22,6 +22,7 @@ import requests
 from sys import argv
 from wit import Wit
 from bottle import Bottle, request, debug
+import wolframalpha as wolf
 
 # Wit.ai parameters
 WIT_TOKEN = 'FCLEILUP6T2PTIH6TSWWJYFJYKG3KL2L'
@@ -29,6 +30,9 @@ WIT_TOKEN = 'FCLEILUP6T2PTIH6TSWWJYFJYKG3KL2L'
 FB_PAGE_TOKEN = 'EAAEvbHrTo9IBAJigS9lKANutM4V3qOzcnzi86PbWufrN5NJaB1c8ZBOn1DEof3lrTPX9w3qZCpWn93G9yRLw5UrtzS4dP6HLmuAenhAjKJUXDMVP67Iq2FHr2Fc3yCyZBgF87ZAj0y1PPshW0elBivNr0vXw6UPxY5BsyZA1u3gZDZD'
 # A user secret to verify webhook get request.
 FB_VERIFY_TOKEN = 'hello'
+
+# Wolfram
+WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
 
 # Setup Bottle Server
 debug(True)
@@ -77,7 +81,11 @@ def messenger_post():
                     # We handle the response in the function send()
                     res = client.message(text)
                     print('MESSAGE RESPONSE = ', res)
-                    fb_message(fb_id, str(res['entities']))
+
+                    if 'wikipedia_search_query' in res['entries']:
+                        wolfclient.query(res['entries']['wikipedia_search_query']['value'])
+                    else:
+                        fb_message(fb_id, str(res['entities']))
 
             except Exception as e:
                 print(e)
@@ -143,14 +151,11 @@ def get_forecast(request):
             del context['forecast']
     return context
 
-# Setup Actions
-actions = {
-    'send': send,
-    'getForecast': get_forecast,
-}
+
 
 # Setup Wit Client
-client = Wit(access_token=WIT_TOKEN, actions=actions)
+client = Wit(access_token=WIT_TOKEN)
+wolfclient = wolf.Client(WOLFRAM_TOKEN)
 
 if __name__ == '__main__':
     # Run Server
