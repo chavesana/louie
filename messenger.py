@@ -156,7 +156,6 @@ def get_forecast(request):
     return context
 
 
-
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN)
 wolfclient = wolf.Client(WOLFRAM_TOKEN)
