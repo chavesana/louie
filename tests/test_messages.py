@@ -38,3 +38,7 @@ def message_test_three():
     else:
         print('Oh no, got response: ', json_obj['entities'])
         assert False
+
+message_test_one()
+message_test_two()
+message_test_three()
