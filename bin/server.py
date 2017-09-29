@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath('..'))
 sys.path.append(os.path.abspath('.'))
 
 import louie as lou
+from louie import *
 
 # Setup Bottle Server
 debug(True)
