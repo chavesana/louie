@@ -6,7 +6,7 @@ def wolfram_search(simple_question):
     i = 0
 
     if(query_result['@success'] == 'false'):
-        print('We did not find an answer for your question.')
+        return 'We did not find an answer for your question.'
 
     elif(query_result.results):
         print('I did not find a straight forward answers, here is what I found: \n')
@@ -14,7 +14,6 @@ def wolfram_search(simple_question):
             for sub in pod.subpods:
                 i += 1
                 if(i == 6):
-                    print(sub['img']['@title'], i)
-                    break
+                    return 'I did not find a straight forward answers, here is what I found: \n' + sub['img']['@title']
     else:
-        print(next(query_result.results).text)
+        return next(query_result.results).text
