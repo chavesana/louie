@@ -17,3 +17,6 @@ def wolfram_search(simple_question):
                     return 'I did not find a straight forward answers, here is what I found: \n' + sub['img']['@title']
     else:
         return next(query_result.results).text
+
+def places_search(text):
+    pass

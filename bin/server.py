@@ -7,6 +7,7 @@ from bottle import Bottle, request, debug
 import wolframalpha as wolf
 
 sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('.'))
 
 import louie as lou
 
@@ -60,7 +61,8 @@ def messenger_post():
                     if 'wikipedia_search_query' in res['entities'].keys():
                         print('[PERFORMING WOLFRAM QUERY]')
                         message_string = res['entities']['wikipedia_search_query'][0]['value']
-                        lou.wolfram_query(message_string)
+                        res = lou.wolfram_query(message_string)
+                        fb_message(fb_id, res)
 
             except Exception as e:
                 print('ERROR ==================================')
