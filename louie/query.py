@@ -2,7 +2,6 @@ from louie import wolfclient
 
 def wolfram_search(simple_question):
     print('performing wolfram search-------------')
-    print(question)
     query_result = wolfclient.query(str(simple_question))
     i = 0
 
