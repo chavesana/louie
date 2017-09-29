@@ -10,7 +10,6 @@ sys.path.append(os.path.abspath('..'))
 
 import louie as lou
 
-
 # Setup Bottle Server
 debug(True)
 app = Bottle()
@@ -86,19 +85,6 @@ def fb_message(sender_id, text):
     print("content type:", type(resp.content))
     return resp.content.decode("utf-8")
 
-
-def first_entity_value(entities, entity):
-    """
-    Returns first entity value
-    """
-    if entity not in entities:
-        return None
-    val = entities[entity][0]['value']
-    if not val:
-        return None
-    return val['value'] if isinstance(val, dict) else val
-
-
 def send(request, response):
     """
     Sender function
@@ -112,23 +98,6 @@ def send(request, response):
     # send message
     fb_message(fb_id, text.decode("utf-8"))
 
-
-def get_forecast(request):
-    context = request['context']
-    entities = request['entities']
-    loc = first_entity_value(entities, 'location')
-    if loc:
-        # This is where we could use a weather service api to get the weather.
-        context['forecast'] = 'sunny'
-        if context.get('missingLocation') is not None:
-            del context['missingLocation']
-    else:
-        context['missingLocation'] = True
-        if context.get('forecast') is not None:
-            del context['forecast']
-    return context
-
 if __name__ == '__main__':
     # Run Server
-    # print(os.environ['PORT'])
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
