@@ -1,43 +1,19 @@
 #!/usr/bin/env python
-# coding:utf-8
-
-# Messenger API integration example
-# We assume you have:
-# * a Wit.ai bot setup (https://wit.ai/docs/quickstart)
-# * a Messenger Platform setup (https://developers.facebook.com/docs/messenger-platform/quickstart)
-# You need to `pip install the following dependencies: requests, bottle.
-#
-# 1. pip install requests bottle
-# 2. You can run this example on a cloud service provider like Heroku, Google Cloud Platform or AWS.
-#    Note that webhooks must have a valid SSL certificate, signed by a certificate authority and won't work on your localhost.
-# 3. Set your environment variables e.g. WIT_TOKEN=your_wit_token
-#                                        FB_PAGE_TOKEN=your_page_token
-#                                        FB_VERIFY_TOKEN=your_verify_token
-# 4. Run your server e.g. python examples/messenger.py {PORT}
-# 5. Subscribe your page to the Webhooks using verify_token and `https://<your_host>/webhook` as callback URL.
-# 6. Talk to your bot on Messenger!
-
 import os
+import sys
 import requests
 from sys import argv
-from wit import Wit
 from bottle import Bottle, request, debug
 import wolframalpha as wolf
 
-# Wit.ai parameters
-WIT_TOKEN = 'FCLEILUP6T2PTIH6TSWWJYFJYKG3KL2L'
-# Messenger API parameters
-FB_PAGE_TOKEN = 'EAAEvbHrTo9IBAJigS9lKANutM4V3qOzcnzi86PbWufrN5NJaB1c8ZBOn1DEof3lrTPX9w3qZCpWn93G9yRLw5UrtzS4dP6HLmuAenhAjKJUXDMVP67Iq2FHr2Fc3yCyZBgF87ZAj0y1PPshW0elBivNr0vXw6UPxY5BsyZA1u3gZDZD'
-# A user secret to verify webhook get request.
-FB_VERIFY_TOKEN = 'hello'
+sys.path.append(os.path.abspath('..'))
 
-# Wolfram
-WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
+import louie as lou
+
 
 # Setup Bottle Server
 debug(True)
 app = Bottle()
-
 
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
@@ -79,16 +55,13 @@ def messenger_post():
                     text = message['message']['text']
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
-                    res = client.message(text)
+                    res = lou.witclient.message(text)
                     print('MESSAGE RESPONSE = ', res)
 
                     if 'wikipedia_search_query' in res['entities'].keys():
-                        print('performing wolfram search-------------')
-                        query_result = wolfclient.query(res['entities']['wikipedia_search_query'][0]['value'])
-                        print(str(query_result))
-                        fb_message(fb_id, next(query_result.results).text)
-                    else:
-                        fb_message(fb_id, str(res['entities']))
+                        print('[PERFORMING WOLFRAM QUERY]')
+                        message_string = res['entities']['wikipedia_search_query'][0]['value']
+                        lou.wolfram_query(message_string)
 
             except Exception as e:
                 print('ERROR ==================================')
@@ -154,11 +127,6 @@ def get_forecast(request):
         if context.get('forecast') is not None:
             del context['forecast']
     return context
-
-
-# Setup Wit Client
-client = Wit(access_token=WIT_TOKEN)
-wolfclient = wolf.Client(WOLFRAM_TOKEN)
 
 if __name__ == '__main__':
     # Run Server
