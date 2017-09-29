@@ -1,1 +1,1 @@
-web: python messenger.py
+web: python bin/server.py
