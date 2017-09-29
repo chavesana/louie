@@ -5,3 +5,4 @@ bottle
 wit
 python-google-places
 wolframalpha
+fuzzywuzzy

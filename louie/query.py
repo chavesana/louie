@@ -1,7 +1,6 @@
 from louie import wolfclient
 
 def wolfram_search(simple_question):
-    print('performing wolfram search-------------')
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
 
@@ -17,3 +16,6 @@ def wolfram_search(simple_question):
                 sub_pod_num += 1
                 if(sub_pod_num == 6):
                     return sub['img']['@title']
+                
+def places_search(text):
+    pass
