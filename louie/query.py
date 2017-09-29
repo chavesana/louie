@@ -8,7 +8,7 @@ def wolfram_search(simple_question):
     if(query_result['@success'] == 'false'):
         return 'We did not find an answer for your question.'
 
-    elif(query_result.results):
+    elif(not query_result.results):
         print('I did not find a straight forward answers, here is what I found: \n')
         for pod in query_result.pods:
             for sub in pod.subpods:
