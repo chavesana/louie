@@ -6,9 +6,6 @@ from sys import argv
 from bottle import Bottle, request, debug
 import wolframalpha as wolf
 
-sys.path.append(os.path.abspath('..'))
-sys.path.append(os.path.abspath('.'))
-
 import louie as lou
 from louie import *
 

@@ -92,7 +92,7 @@ class YelpFusion(object):
         return response.json()
 
 
-    def search(self, term, location='', ll=(0,0), limit=10, price=None, open_now=False,
+    def search(self, term, location='', ll=None, limit=10, price=None, open_now=False,
                sort_by=sort.BEST_MATCH, radius=9000, locale=None, offset=0):
         """
         Query the Search API by a search term and location.
@@ -104,7 +104,13 @@ class YelpFusion(object):
                The search term passed to the API.
 
         location : string
-                   The search location passed to the API. Plain
+                   The plain text search location passed to the API. e.g. Flagstaff, AZ or an home address/
+                   Must be provided if ll is not provided.
+
+        ll : tuple
+             Tuple of floats in the format (latitude, longitude), location used as the center of the
+             search. If both ll and location are provided, ll takes precedence and location will
+             be ignored by the specification of the Yelp API.
 
         sort_by : string
                   Sort the results by one of the these modes: best_match, rating, review_count
@@ -144,8 +150,9 @@ class YelpFusion(object):
         return self.request(API_HOST, business_path)
 
 
-    def query_api(self, term, location):
-        """Queries the API by the input values from the user.
+    def get(self, term, location):
+        """
+        Queries the API by the input values from the user and only return the top result.
         Args:
             term (str): The search term to query.
             location (str): The location of the business to query.
