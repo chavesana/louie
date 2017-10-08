@@ -16,6 +16,6 @@ def wolfram_search(simple_question):
                 sub_pod_num += 1
                 if(sub_pod_num == 6):
                     return sub['img']['@title']
-                
+
 def places_search(text):
     pass
