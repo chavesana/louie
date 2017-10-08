@@ -2,7 +2,7 @@ from wit import Wit
 import wolframalpha as wolf
 from louie.yelpfusion import YelpFusion
 
-__all__ = ['wolfram_search', 'witclient', 'wolfclient', 'yelpclient']
+# __all__ = ['wolfram_search', 'witclient', 'wolfclient', 'yelpclient', 'FB_PAGE_TOKEN']
 
 WIT_TOKEN = 'FCLEILUP6T2PTIH6TSWWJYFJYKG3KL2L'
 
