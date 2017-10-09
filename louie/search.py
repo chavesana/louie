@@ -39,7 +39,7 @@ def wolfram_search(simple_question):
         message_subject = str(wit_response['entities'])
         # context['subject'] = message_subject
         # print(context['subject'])
-        return "What exactly do you want to know about ?"
+        return "What exactly do you want to know about" + message_subject + "?"
 
     elif(list(query_result.results)):
          return next(query_result.results).text
