@@ -1,6 +1,7 @@
 import os
 import sys
-
+import random
 import louie
 
-louie.interactive(louie.witclient)
+name = random.choice(['Louie', 'Louise'])
+louie.interactive(louie.witclient, bot_name=name)

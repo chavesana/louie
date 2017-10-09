@@ -56,18 +56,38 @@ def wolfram_search(wit_response):
                 if(sub_pod_num == 6):
                     return sub['img']['@title']
 
-def yelp_search(*args, **kwargs):
-    result = yelpclientself.search(*args, **kwargs)
-    top_option = result
-    pass
+def local_search(wit_response):
+    intents = wit_response['entities']
+
+    # get key components of the wit analysis
+    message = wit_response['_text']
+    qualitative_adj = intents.get('qualitative_adj')[0]['value']
+    noun = intents.get('local_search_query')[0]['value']
+
+    if qualitative_adj:
+        sort_by = 'rating'
+    else:
+        sort_by = 'best_match'
+
+    result = yelpclient.search(noun, location='Flagstaff, AZ',sort_by=sort_by)
+
+    name = result['businesses'][0]['name']
+    location = result['businesses'][0]['location']['address1']
+
+    answer = '{} @ {}'.format(name, location)
+    return answer
 
 def process_nlp(wit_response):
     intents = wit_response['entities'].keys()
 
     if 'wikipedia_search_query' in intents:
-        print('[PERFORMING WOLFRAM QUERY]')
-        res = louie.wolfram_search(wit_response)
-        return res
+        print('[WOLFRAM QUERY]')
+        res = wolfram_search(wit_response)
+    elif 'local_search_query' in intents:
+        print('[LOCAL SEARCH]')
+        res = local_search(wit_response)
+
+    return res
 
 def interactive(witclient, bot_name = 'Louie'):
     # input/raw_input are not interchangeable between Python 2 and 3
