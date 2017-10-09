@@ -17,15 +17,33 @@ witclient = Wit(access_token=WIT_TOKEN)
 wolfclient = wolf.Client(WOLFRAM_TOKEN)
 yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
+context = {}
+pronouns = ['he', 'she', 'it', 'him', 'her', 'it', 'his', 'hers', 'its', 'them', 'they', 'their', 'theirs']
+
 def wolfram_search(simple_question):
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
 
-    if(query_result['@success'] == 'false'):
+
+    if(context):
+        for pronoun in pronouns:
+            if(pronoun in simple_question):
+                simple_question.replace(pronoun, context['subject'])
+                wolfram_search(simple_question)
+                break
+
+    elif(query_result['@success'] == 'false'):
         return 'We did not find an answer for your question.'
 
+    elif(not list(query_result.results)):
+        wit_response = witclient.message(simple_question)
+        message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
+        context['subject'] = message_subject
+        print(context['subject'])
+        return "What exactly do you want to know about " + message_subject + "?"
+
     elif(list(query_result.results)):
-         return next(query_result.results).text
+         print(next(query_result.results).text)
 
     else:
         for pod in query_result.pods:
