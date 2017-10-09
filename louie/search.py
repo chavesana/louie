@@ -36,9 +36,9 @@ def wolfram_search(simple_question):
 
     elif(not list(query_result.results)):
         wit_response = witclient.message(simple_question)
-        message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
-        context['subject'] = message_subject
-        print(context['subject'])
+        # message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
+        # context['subject'] = message_subject
+        # print(context['subject'])
         return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
