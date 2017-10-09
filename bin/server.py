@@ -58,11 +58,8 @@ def messenger_post():
                     res = lou.witclient.message(text)
                     print('MESSAGE RESPONSE = ', res)
 
-                    if 'wikipedia_search_query' in res['entities'].keys():
-                        print('[PERFORMING WOLFRAM QUERY]')
-                        message_string = res['entities']['wikipedia_search_query'][0]['value']
-                        res = lou.wolfram_search(message_string)
-                        fb_message(fb_id, res)
+                    bot_response = louie.process_nlp(res)
+                    fb_message(fb_id, bot_response)
 
             except Exception as e:
                 print('ERROR ==================================')
