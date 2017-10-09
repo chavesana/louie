@@ -13,6 +13,7 @@ from louie import *
 debug(True)
 app = Bottle()
 
+
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
 def messenger_webhook():
@@ -27,6 +28,7 @@ def messenger_webhook():
         return challenge
     else:
         return 'Invalid Request or Verification Token'
+
 
 # Facebook Messenger POST Webhook
 @app.post('/webhook')
@@ -70,6 +72,7 @@ def messenger_post():
         return 'Received Different Event'
     return None
 
+
 def fb_message(sender_id, text):
     """
     Function for returning response to messenger
@@ -85,6 +88,7 @@ def fb_message(sender_id, text):
     print("content type:", type(resp.content))
     return resp.content.decode("utf-8")
 
+
 def send(request, response):
     """
     Sender function
@@ -97,6 +101,7 @@ def send(request, response):
     print("text ===== ", text)
     # send message
     fb_message(fb_id, text.decode("utf-8"))
+
 
 if __name__ == '__main__':
     # Run Server

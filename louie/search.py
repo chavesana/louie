@@ -1,6 +1,10 @@
 from wit import Wit
 import wolframalpha as wolf
+
+import louie
 from louie.yelpfusion import YelpFusion
+from prompt_toolkit import prompt
+from prompt_toolkit.history import InMemoryHistory
 
 # __all__ = ['wolfram_search', 'witclient', 'wolfclient', 'yelpclient', 'FB_PAGE_TOKEN']
 
@@ -20,10 +24,11 @@ yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 context = {}
 pronouns = ['he', 'she', 'it', 'him', 'her', 'it', 'his', 'hers', 'its', 'them', 'they', 'their', 'theirs']
 
-def wolfram_search(simple_question):
+
+def wolfram_search(wit_response):
+    simple_question = wit_response['entities']['wikipedia_search_query'][0]['value']
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
-
 
     if(context):
         for pronoun in pronouns:
@@ -36,7 +41,6 @@ def wolfram_search(simple_question):
         return 'We did not find an answer for your question.'
 
     elif(not list(query_result.results)):
-        wit_response = witclient.message(simple_question)
         message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
         context['subject'] = message_subject
         print(context['subject'])
@@ -56,3 +60,30 @@ def yelp_search(*args, **kwargs):
     result = yelpclientself.search(*args, **kwargs)
     top_option = result
     pass
+
+def process_nlp(wit_response):
+    intents = wit_response['entities'].keys()
+
+    if 'wikipedia_search_query' in intents:
+        print('[PERFORMING WOLFRAM QUERY]')
+        res = louie.wolfram_search(wit_response)
+        return res
+
+def interactive(witclient, bot_name = 'Louie'):
+    # input/raw_input are not interchangeable between Python 2 and 3
+    try:
+        input_function = raw_input
+    except NameError:
+        input_function = input
+
+    history = InMemoryHistory()
+    while True:
+        try:
+            message = prompt('You >> ', history=history, mouse_support=True).rstrip()
+        except (KeyboardInterrupt, EOFError):
+            return
+
+        wit_response = witclient.message(message, {})
+        print(wit_response)
+        print()
+        print('{} >> '.format(bot_name), process_nlp(wit_response))

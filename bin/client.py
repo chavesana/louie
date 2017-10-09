@@ -1,5 +1,6 @@
 import os
 import sys
 
-from louie import witclient
-witclient.interactive()
+import louie
+
+louie.interactive(louie.witclient)
