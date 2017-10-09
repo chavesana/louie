@@ -24,15 +24,22 @@ def wolfram_search(simple_question):
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
 
+    # if(context):
+    #     for pronoun in pronouns:
+    #         if(pronoun in simple_question):
+    #             simple_question.replace(pronoun, context['subject'])
+    #             wolfram_search(simple_question)
+    #             break
+
     if(query_result['@success'] == 'false'):
         return 'I did not find an answer for your question.'
 
-    elif(not list(query_result.results)):
-        wit_response = witclient.message(simple_question)
-        message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
-        context['subject'] = message_subject
-        print(context['subject'])
-        return "What exactly do you want to know about " + message_subject + "?"
+    # elif(not list(query_result.results)):
+    #     wit_response = witclient.message(simple_question)
+    #     message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
+    #     context['subject'] = message_subject
+    #     print(context['subject'])
+    #     return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
          return next(query_result.results).text
