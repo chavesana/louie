@@ -8,7 +8,7 @@ from prompt_toolkit.history import InMemoryHistory
 
 # __all__ = ['wolfram_search', 'witclient', 'wolfclient', 'yelpclient', 'FB_PAGE_TOKEN']
 
-WIT_TOKEN = 'FCLEILUP6T2PTIH6TSWWJYFJYKG3KL2L'
+WIT_TOKEN = 'PEV2QBTAEKH6YIZM6JETQAOBBJIUMTDT'
 
 FB_PAGE_TOKEN = 'EAAVWYdbX2BUBAJZBmlbIeZCoocO5CdRHY82VNs8drNbB0yNL5bj63K0ZCQqIqzAbrl0u2ollXrsFIiRMfebWAQmpF1sw2EsThg1TpDulsygqGkQQ7dcHZCZB6W6QGlejXKYEg0ObqZAOTXGqKe9exLf57ZCQW546Kh5W66lEOvaGjX3ffruHXXT'
 FB_VERIFY_TOKEN = 'hello'
@@ -22,7 +22,7 @@ wolfclient = wolf.Client(WOLFRAM_TOKEN)
 yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
 context = {}
-pronouns = ['he', 'she', 'it', 'him', 'her', 'it', 'his', 'hers', 'its', 'them', 'they', 'their', 'theirs']
+pronouns = ['he', 'she', 'it', 'him', 'her', 'its', 'his', 'hers', 'its', 'them', 'they', 'their', 'theirs']
 
 
 def wolfram_search(wit_response):
@@ -47,7 +47,7 @@ def wolfram_search(wit_response):
         return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
-         print(next(query_result.results).text)
+         return next(query_result.results).text
 
     else:
         for pod in query_result.pods:
