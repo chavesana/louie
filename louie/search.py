@@ -35,7 +35,7 @@ def wolfram_search(simple_question):
         return 'I did not find an answer for your question.'
 
     elif(not list(query_result.results)):
-        wit_response = witclient.message(simple_question)
+        wit_response = witclient.message(str(simple_question))
         message_subject = str(wit_response)
         # context['subject'] = message_subject
         # print(context['subject'])
