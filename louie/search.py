@@ -24,7 +24,6 @@ def wolfram_search(simple_question):
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
 
-
     if(context):
         for pronoun in pronouns:
             if(pronoun in simple_question):
@@ -43,7 +42,7 @@ def wolfram_search(simple_question):
         return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
-         print(next(query_result.results).text)
+         return next(query_result.results).text
 
     else:
         for pod in query_result.pods:
