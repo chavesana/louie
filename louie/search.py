@@ -26,7 +26,7 @@ pronouns = ['he', 'she', 'it', 'him', 'her', 'it', 'his', 'hers', 'its', 'them',
 
 
 def wolfram_search(wit_response):
-    simple_question = wit_response['entities']['wikipedia_search_query'][0]['value']
+    simple_question = wit_response['_text']
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
 
@@ -47,7 +47,7 @@ def wolfram_search(wit_response):
         return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
-         print(next(query_result.results).text)
+         return next(query_result.results).text
 
     else:
         for pod in query_result.pods:
@@ -57,20 +57,31 @@ def wolfram_search(wit_response):
                     return sub['img']['@title']
 
 def local_search(wit_response):
-    intents = wit_response['entities']
+    entities = wit_response['entities']
+    NAU_CAMPUS = (35.188,-111.653)
 
     # get key components of the wit analysis
-    message = wit_response['_text']
-    qualitative_adj = intents.get('qualitative_adj')[0]['value']
-    noun = intents.get('local_search_query')[0]['value']
+    message = wit_response.get('_text')
+    params = louie.Params()
+    params['qualitative_adj'] = entities.get('qualitative_adj')
+    params['noun'] = entities.get('local_search_query')
+    params['location'] = entities.get('location')
+    params['intent'] = entities.get('intent')
 
-    if qualitative_adj:
+    for key in params.keys():
+        params[key] = params[key][0]['value']
+
+    if params.get('qualitative_adj') or params.get('intent') == 'positive':
         sort_by = 'rating'
     else:
         sort_by = 'best_match'
 
-    result = yelpclient.search(noun, location='Flagstaff, AZ',sort_by=sort_by)
+    ll = (0,0)
+    if params.get('location') and 'campus' in params.get('location'):
+        ll = NAU_CAMPUS
 
+    print(sort_by)
+    result = yelpclient.search(params['noun'], location='Flagstaff, AZ', ll=ll, sort_by=sort_by)
     name = result['businesses'][0]['name']
     location = result['businesses'][0]['location']['address1']
 
@@ -78,16 +89,23 @@ def local_search(wit_response):
     return answer
 
 def process_nlp(wit_response):
-    intents = wit_response['entities'].keys()
 
-    if 'wikipedia_search_query' in intents:
+    keys = wit_response['entities'].keys()
+    intents = wit_response['entities'].get('intent')
+
+    if intents:
+        intenets = intents[0]['value']
+
+    if 'wikipedia_search_query' in keys:
         print('[WOLFRAM QUERY]')
         res = wolfram_search(wit_response)
-    elif 'local_search_query' in intents:
+        return res
+
+    elif 'local_search_query' in keys or intents == 'food':
         print('[LOCAL SEARCH]')
         res = local_search(wit_response)
+        return res
 
-    return res
 
 def interactive(witclient, bot_name = 'Louie'):
     # input/raw_input are not interchangeable between Python 2 and 3
