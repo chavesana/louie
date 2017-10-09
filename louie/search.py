@@ -101,7 +101,7 @@ def process_nlp(wit_response):
         res = wolfram_search(wit_response)
         return res
 
-    elif 'local_search_query' in keys or intents == 'food':
+    elif 'local_search_query' in keys or intents == 'business_search':
         print('[LOCAL SEARCH]')
         res = local_search(wit_response)
         return res
