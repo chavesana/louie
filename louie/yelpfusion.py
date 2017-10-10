@@ -92,7 +92,7 @@ class YelpFusion(object):
         return response.json()
 
 
-    def search(self, term, location='', ll=None, limit=10, price=None, open_now=False,
+    def search(self, term, location='', ll=(0,0), limit=10, price=None, open_now=False,
                sort_by=sort.BEST_MATCH, radius=9000, locale=None, offset=0):
         """
         Query the Search API by a search term and location.

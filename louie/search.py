@@ -29,7 +29,6 @@ def wolfram_search(wit_response):
     letters = set('abcdefghijklmnopqrstuvwxy ABCDEFGHIJKLMNOPQRSTUVWXYZ')
     simple_value = wit_response['entities']['wikipedia_search_query'][0]['value']
     simple_question = wit_response['_text']
-
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
     word_place = 0
@@ -59,18 +58,56 @@ def wolfram_search(wit_response):
     else:
         print("I could not complete the search, is there another question you would like to ask?")
 
-def yelp_search(*args, **kwargs):
-    result = yelpclientself.search(*args, **kwargs)
-    top_option = result
-    pass
+def local_search(wit_response):
+    entities = wit_response['entities']
+    NAU_CAMPUS = (35.188,-111.653)
+
+    # get key components of the wit analysis
+    message = wit_response.get('_text')
+    params = louie.Params()
+    params['qualitative_adj'] = entities.get('qualitative_adj')
+    params['noun'] = entities.get('local_search_query')
+    params['location'] = entities.get('location')
+    params['intent'] = entities.get('intent')
+
+    for key in params.keys():
+        params[key] = params[key][0]['value']
+
+    if params.get('qualitative_adj') or params.get('intent') == 'positive':
+        sort_by = 'rating'
+    else:
+        sort_by = 'best_match'
+
+    ll = (0,0)
+    if params.get('location') and 'campus' in params.get('location'):
+        ll = NAU_CAMPUS
+
+    print(sort_by)
+    result = yelpclient.search(params['noun'], location='Flagstaff, AZ', ll=ll, sort_by=sort_by)
+    name = result['businesses'][0]['name']
+    location = result['businesses'][0]['location']['address1']
+
+    answer = '{} @ {}'.format(name, location)
+    return answer
 
 def process_nlp(wit_response):
-    intents = wit_response['entities'].keys()
 
-    if 'wikipedia_search_query' in intents:
-        print('[PERFORMING WOLFRAM QUERY]')
-        res = louie.wolfram_search(wit_response)
+    keys = wit_response['entities'].keys()
+    intents = wit_response['entities'].get('intent')
+
+    if intents:
+        intenets = intents[0]['value']
+
+    if 'wikipedia_search_query' in keys:
+        print('[WOLFRAM QUERY]')
+        res = wolfram_search(wit_response)
         return res
+
+    elif 'local_search_query' in keys or intents == 'food':
+        print('[LOCAL SEARCH]')
+        res = local_search(wit_response)
+        return res
+
 
 def interactive(witclient, bot_name = 'Louie'):
     # input/raw_input are not interchangeable between Python 2 and 3
