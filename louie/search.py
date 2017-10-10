@@ -22,20 +22,28 @@ wolfclient = wolf.Client(WOLFRAM_TOKEN)
 yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
 context = {}
-pronouns = ['he', 'she', 'it', 'him', 'her', 'its', 'his', 'hers', 'its', 'them', 'they', 'their', 'theirs']
+pronouns = ["he", "she", "it", "him", "her", "its", "his", "hers", "its", "them", "they", "their", "theirs"]
 
 
 def wolfram_search(wit_response):
-    simple_question = wit_response['entities']['wikipedia_search_query'][0]['value']
+    letters = set('abcdefghijklmnopqrstuvwxy ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    simple_value = wit_response['entities']['wikipedia_search_query'][0]['value']
+    simple_question = wit_response['_text']
+
     query_result = wolfclient.query(str(simple_question))
     sub_pod_num = 0
+    word_place = 0
+    simple_question = ''.join(filter(letters.__contains__, simple_question))
+    sentence = simple_question.split()
 
     if(context):
         for pronoun in pronouns:
-            if(pronoun in simple_question):
-                simple_question.replace(pronoun, context['subject'])
-                wolfram_search(simple_question)
-                break
+            for word in sentence:
+                if(pronoun == word):
+                    sentence[word_place] = context['subject']
+                    sentence = ' '.join(sentence)
+                    return next(wolfclient.query(str(sentence)).results).text
+                word_place += 1
 
     elif(query_result['@success'] == 'false'):
         return 'We did not find an answer for your question.'
@@ -43,18 +51,13 @@ def wolfram_search(wit_response):
     elif(not list(query_result.results)):
         message_subject = str(wit_response['entities']['wikipedia_search_query'][0]['value'])
         context['subject'] = message_subject
-        print(context['subject'])
         return "What exactly do you want to know about " + message_subject + "?"
 
     elif(list(query_result.results)):
          return next(query_result.results).text
 
     else:
-        for pod in query_result.pods:
-            for sub in pod.subpods:
-                sub_pod_num += 1
-                if(sub_pod_num == 6):
-                    return sub['img']['@title']
+        print("I could not complete the search, is there another question you would like to ask?")
 
 def yelp_search(*args, **kwargs):
     result = yelpclientself.search(*args, **kwargs)
