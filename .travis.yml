@@ -63,7 +63,7 @@ install:
   # - python condaci.py setup
 
 script:
-  - pytest --cov=louie
+  - pytest --cov=.
   # clean up any remaining processes...
   - if [ $TRAVIS_OS_NAME == "linux" ]; then killall5; fi
 
