@@ -31,14 +31,3 @@ def test_two():
     else:
         print('Oh no, got response: ', json_obj['entities'])
         assert False
-
-def test_three():
-    json_obj = client.message('Who is Donald Trump?')
-    intents = json_obj['entities']
-
-    if('wikipedia_search_query' in intents):
-        assert True
-
-    else:
-        print('Oh no, got response: ', json_obj['entities'])
-        assert False
