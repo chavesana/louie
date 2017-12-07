@@ -21,8 +21,8 @@ witclient = Wit(access_token=WIT_TOKEN)
 wolfclient = wolf.Client(WOLFRAM_TOKEN)
 yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
-context = {}
-pronouns = ["he", "she", "it", "him", "her", "its", "his", "hers", "its", "them", "they", "their", "theirs"]
+wolfram_context = {}
+pronouns = ["he", "she", "it", "him", "her", "its", "his", "hers", "them", "they", "their", "theirs"]
 
 
 def wolfram_search(wit_response):
@@ -35,7 +35,7 @@ def wolfram_search(wit_response):
     simple_question = ''.join(filter(letters.__contains__, simple_question))
     sentence = simple_question.split()
 
-    if(context):
+    if(wolfram_context):
         for pronoun in pronouns:
             for word in sentence:
                 if(pronoun == word):
@@ -103,7 +103,7 @@ def process_nlp(wit_response):
         res = wolfram_search(wit_response)
         return res
 
-    elif 'local_search_query' in keys or intents == 'food':
+    elif 'local_search_query' in keys or intents == 'business_search':
         print('[LOCAL SEARCH]')
         res = local_search(wit_response)
         return res
