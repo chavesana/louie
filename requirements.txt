@@ -7,6 +7,5 @@ python-google-places
 wolframalpha
 fuzzywuzzy
 scipy
-matplotlib
 networkx
 tk
