@@ -6,7 +6,6 @@ wit
 python-google-places
 wolframalpha
 fuzzywuzzy
-copy
 collections
 scipy.misc
 matplotlib
