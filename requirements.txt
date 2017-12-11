@@ -6,3 +6,9 @@ wit
 python-google-places
 wolframalpha
 fuzzywuzzy
+multiprocessing
+traceback
+copy
+collections
+scipy.misc
+matplotlib
