@@ -5,7 +5,6 @@ import requests
 from sys import argv
 from bottle import Bottle, request, debug
 import wolframalpha as wolf
-
 import louie as lou
 from louie import *
 
@@ -50,16 +49,25 @@ def messenger_post():
                     print(message)
                     # Yay! We got a new message!
                     # We retrieve the Facebook user ID of the sender
+                    sender = message['sender']
                     fb_id = message['sender']['id']
+
+
+
                     # We retrieve the message content
                     text = message['message']['text']
+
+                    message = {
+                        'sender' : {'Someone' : fb_id},
+                        'text' : text
+                    }
+
+                    results = louie.build_pipeline(message)
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
-                    res = lou.witclient.message(text)
-                    print('MESSAGE RESPONSE = ', res)
+                    print('MESSAGE RESPONSE = ', str(results))
 
-                    bot_response = louie.process_nlp(res)
-                    fb_message(fb_id, bot_response)
+                    fb_message(fb_id, str(results))
 
             except Exception as e:
                 print('ERROR ==================================')
@@ -96,6 +104,8 @@ def send(request, response):
     text = response['text']
 
     print("text ===== ", text)
+
+    print("Entire payload =======", response)
     # send message
     fb_message(fb_id, text.decode("utf-8"))
 
