@@ -17,7 +17,6 @@ import wolframalpha as wolf
 from louie.yelpfusion import YelpFusion
 from prompt_toolkit import prompt
 from prompt_toolkit.history import InMemoryHistory
-import facebook
 
 
 WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'
