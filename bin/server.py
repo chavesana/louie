@@ -62,7 +62,7 @@ def messenger_post():
                         'text' : text
                     }
 
-                    results = louie.build_pipeline(message)
+                    results = lou.build_pipeline(message)
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     print('MESSAGE RESPONSE = ', str(results))
