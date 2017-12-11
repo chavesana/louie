@@ -6,5 +6,5 @@ wit
 python-google-places
 wolframalpha
 fuzzywuzzy
-scipy.misc
+scipy
 matplotlib
