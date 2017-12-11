@@ -7,6 +7,8 @@ from bottle import Bottle, request, debug
 import wolframalpha as wolf
 import louie as lou
 from louie import *
+import wolframalpha as wolf
+
 
 # Setup Bottle Server
 debug(True)
@@ -62,20 +64,17 @@ def messenger_post():
                     print(message)
                     # Yay! We got a new message!
                     # We retrieve the Facebook user ID of the sender
-                    sender = message['sender']
                     fb_id = message['sender']['id']
-
-
 
                     # We retrieve the message content
                     text = message['message']['text']
 
-                    message = {
-                        'sender' : {'Someone' : fb_id},
+                    test_message = {
+                        'sender' : {fb_id : 'User'},
                         'text' : text
                     }
 
-                    results = build_pipeline(message)
+                    results = build_pipeline(test_message)
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     print('MESSAGE RESPONSE = ', str(results))

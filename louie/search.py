@@ -1,8 +1,16 @@
 import networkx as nx
 import numpy as np
+import networkx as nx
+
+from matplotlib import pyplot as plt
+import matplotlib
+
 from scipy.misc import imresize
+
 from collections import defaultdict, MutableMapping, OrderedDict
+
 from copy import deepcopy
+
 from wit import Wit
 import os
 from multiprocessing import Process, Queue
@@ -11,48 +19,63 @@ from copy import deepcopy
 import louie
 import sys
 from louie import *
+import wolframalpha as wolf
 
-# def plot_graph(graph, ax=None, cmap='coolwarm', node_size=300, node_color='.6',labels=False, font_size=24, clusters=None, font_color='k', **kwargs):
-#     """
-#
-#     Parameters
-#     ----------
-#     graph : object
-#             A networkX or derived graph object
-#
-#     ax : objext
-#          A MatPlotLib axes object
-#
-#     cmap : str
-#            A MatPlotLib color map string. Default 'Spectral'
-#
-#     Returns
-#     -------
-#     ax : object
-#          A MatPlotLib axes object. Either the argument passed in
-#          or a new object
-#     """
-#     if ax is None:
-#         ax = plt.gca()
-#
-#     cmap = matplotlib.cm.get_cmap(cmap)
-#
-#     # Setup edge color based on the health metric
-#     colors = []
-#     for s, d, e in graph.edges(data=True):
-#         if hasattr(e, 'health'):
-#             colors.append(cmap(e.health)[0])
-#         else:
-#             colors.append(cmap(0)[0])
-#
-#     pos = nx.fruchterman_reingold_layout(graph)
-#     nx.draw_networkx_nodes(graph, pos, node_size=node_size, node_color=node_color, ax=ax)
-#     nx.draw_networkx_edges(graph, pos, style='dashed', edge_color=".4",  ax=ax)
-#     if labels:
-#         labels = dict((d,d) for d in graph.nodes())
-#         nx.draw_networkx_labels(graph, pos, labels, font_color=font_color, font_size=font_size,font_weight='bold', ax=ax)
-#     ax.axis('off')
-#     return ax
+
+WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'
+
+FB_PAGE_TOKEN = 'EAAVWYdbX2BUBAJZBmlbIeZCoocO5CdRHY82VNs8drNbB0yNL5bj63K0ZCQqIqzAbrl0u2ollXrsFIiRMfebWAQmpF1sw2EsThg1TpDulsygqGkQQ7dcHZCZB6W6QGlejXKYEg0ObqZAOTXGqKe9exLf57ZCQW546Kh5W66lEOvaGjX3ffruHXXT'
+FB_VERIFY_TOKEN = 'hello'
+WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
+GOOGS_PLACES_TOKEN = 'AIzaSyABRaPH0tzxRT_sVBkkGr5zWkbN3y7jN9Q'
+YELP_APP_ID = 'xqTzjWmr8PIUqv9gkQLWBw'
+YELP_CLIENT_SECRET = '4YtXv1OVhISGWM4Eb1ji7YJc0igSEAOkvXXyiH3KA0tNKZmGhUoh9M2VAlexfIST'
+
+witclient = Wit(access_token=WIT_TOKEN)
+wolfclient = wolf.Client(WOLFRAM_TOKEN)
+yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
+
+def plot_graph(graph, ax=None, cmap='coolwarm', node_size=300, node_color='.6',labels=False, font_size=24, clusters=None, font_color='k', **kwargs):
+    """
+
+    Parameters
+    ----------
+    graph : object
+            A networkX or derived graph object
+
+    ax : objext
+         A MatPlotLib axes object
+
+    cmap : str
+           A MatPlotLib color map string. Default 'Spectral'
+
+    Returns
+    -------
+    ax : object
+         A MatPlotLib axes object. Either the argument passed in
+         or a new object
+    """
+    if ax is None:
+        ax = plt.gca()
+
+    cmap = matplotlib.cm.get_cmap(cmap)
+
+    # Setup edge color based on the health metric
+    colors = []
+    for s, d, e in graph.edges(data=True):
+        if hasattr(e, 'health'):
+            colors.append(cmap(e.health)[0])
+        else:
+            colors.append(cmap(0)[0])
+
+    pos = nx.fruchterman_reingold_layout(graph)
+    nx.draw_networkx_nodes(graph, pos, node_size=node_size, node_color=node_color, ax=ax)
+    nx.draw_networkx_edges(graph, pos, style='dashed', edge_color=".4",  ax=ax)
+    if labels:
+        labels = dict((d,d) for d in graph.nodes())
+        nx.draw_networkx_labels(graph, pos, labels, font_color=font_color, font_size=font_size,font_weight='bold', ax=ax)
+    ax.axis('off')
+    return ax
 
 def processify(func):
     '''Decorator to run a function as a process.
@@ -357,7 +380,6 @@ def wolfram_search(confidences):
 
             answer = next(query_result.results).text
 
-            print(answer)
     except Exception as e:
         print(e)
         print(traceback.print_exc())
@@ -379,8 +401,7 @@ def converge_api_answers(results):
         best_answer = 'no answer'
     return best_answer
 
-
-def build_pipeline(message):
+def build_pipeline(test_message):
     G = Pipeline()
     G.add_node(start)
     G.add_node(run_event)
@@ -419,6 +440,6 @@ def build_pipeline(message):
 
     G.nodes()
 
-    results = G(message)
+    results = G(test_message)
 
     return results
