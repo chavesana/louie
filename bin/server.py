@@ -7,8 +7,6 @@ from bottle import Bottle, request, debug
 import wolframalpha as wolf
 import louie as lou
 from louie import *
-import build_pipeline from Pipeline
-
 
 # Setup Bottle Server
 debug(True)
