@@ -9,4 +9,4 @@ fuzzywuzzy
 scipy
 matplotlib
 networkx
-tkinter
+tk
