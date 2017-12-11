@@ -8,3 +8,4 @@ wolframalpha
 fuzzywuzzy
 scipy
 matplotlib
+networkx
