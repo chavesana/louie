@@ -7,6 +7,8 @@ from bottle import Bottle, request, debug
 import wolframalpha as wolf
 import louie as lou
 from louie import *
+import build_pipeline from Pipeline
+
 
 # Setup Bottle Server
 debug(True)
@@ -62,7 +64,7 @@ def messenger_post():
                         'text' : text
                     }
 
-                    results = lou.build_pipeline(message)
+                    results = build_pipeline(message)
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     print('MESSAGE RESPONSE = ', str(results))
