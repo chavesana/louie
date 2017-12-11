@@ -19,7 +19,12 @@ FB_VERIFY_TOKEN = 'hello'
 WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
 GOOGS_PLACES_TOKEN = 'AIzaSyABRaPH0tzxRT_sVBkkGr5zWkbN3y7jN9Q'
 YELP_APP_ID = 'xqTzjWmr8PIUqv9gkQLWBw'
-YELP_CLIENT_SECRET = '4YtXv1OVhISGWM4Eb1ji7YJc0igSEAOkvXXyiH3KA0tNKZmGhUoh9M2VAlexfIST
+YELP_CLIENT_SECRET = '4YtXv1OVhISGWM4Eb1ji7YJc0igSEAOkvXXyiH3KA0tNKZmGhUoh9M2VAlexfIST'
+
+witclient = Wit(access_token=WIT_TOKEN)
+wolfclient = wolf.Client(WOLFRAM_TOKEN)
+yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
+
 
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
