@@ -59,6 +59,7 @@ def messenger_post():
                     # We retrieve the message content
                     text = message['message']['text']
 
+                    # Builds the message and calls build_pipeline()
                     test_message = {
                         'sender' : {'id' : 'user1'},
                         'text' : text

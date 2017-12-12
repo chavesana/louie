@@ -6,8 +6,6 @@ import numpy as np
 import traceback
 import sys
 import os
-# from matplotlib import pyplot as plt
-# import matplotlib
 from louie.yelpfusion import *
 from scipy.misc import imresize
 from collections import defaultdict, MutableMapping, OrderedDict
@@ -16,8 +14,14 @@ from wit import Wit
 from multiprocessing import Process, Queue
 from copy import deepcopy
 
+'''
+These must be uncommented to build the graph accordingly
+'''
+# from matplotlib import pyplot as plt
+# import matplotlib
 
 
+# Tokens for various services used
 WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'
 FB_PAGE_TOKEN = 'EAAVWYdbX2BUBAJZBmlbIeZCoocO5CdRHY82VNs8drNbB0yNL5bj63K0ZCQqIqzAbrl0u2ollXrsFIiRMfebWAQmpF1sw2EsThg1TpDulsygqGkQQ7dcHZCZB6W6QGlejXKYEg0ObqZAOTXGqKe9exLf57ZCQW546Kh5W66lEOvaGjX3ffruHXXT'
 FB_VERIFY_TOKEN = 'hello'
@@ -26,10 +30,24 @@ GOOGS_PLACES_TOKEN = 'AIzaSyABRaPH0tzxRT_sVBkkGr5zWkbN3y7jN9Q'
 YELP_APP_ID = 'xqTzjWmr8PIUqv9gkQLWBw'
 YELP_CLIENT_SECRET = '4YtXv1OVhISGWM4Eb1ji7YJc0igSEAOkvXXyiH3KA0tNKZmGhUoh9M2VAlexfIST'
 
+# Starts clients
 witclient = Wit(access_token=WIT_TOKEN)
 wolfclient = wolf.Client(WOLFRAM_TOKEN)
 yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
+
+# ********************************
+# BUILDS A MAP OF THE NODES
+# VISULIZATION ONLY
+# ********************************
+
+'''
+# ********************************
+# BUILDS A MAP OF THE NODES
+# VISULIZATION ONLY
+# MUST UNCOMMENT THE ABOVE PACAKAGES
+# ********************************
+'''
 # def plot_graph(graph, ax=None, cmap='coolwarm', node_size=300, node_color='.6',labels=False, font_size=24, clusters=None, font_color='k', **kwargs):
 #     """
 #
@@ -97,6 +115,10 @@ def processify(func):
     process_func.__name__ = func.__name__ + 'processify_func'
     setattr(sys.modules[__name__], process_func.__name__, process_func)
 
+
+    # Wrapper for calling subprocesses
+    # Queue is the order they are started
+    # Subprocess is what calls it, where process_func = function running
     @wraps(func)
     def wrapper(*args, **kwargs):
         q = Queue()
@@ -114,7 +136,7 @@ def processify(func):
     return wrapper
 
 
-
+# Outline for context
 context_schema = {
     "timezone" : "",
     "loc" : [],
@@ -122,14 +144,17 @@ context_schema = {
     "state" : ""
 }
 
+# Outline for facts
 fact_node_schema = {
     "fb_id" : "",
     "text" : "",
     "entities" : {}
 }
 
+
 class Pipeline(nx.DiGraph):
-    """
+    """   The breadth, this builds the Pipeline and allows for filtering
+          the code to each function
     """
     def __init__(self, *args, name='generic pipline', **kwargs):
         super(Pipeline, self).__init__(*args, **kwargs)
@@ -183,23 +208,26 @@ class Pipeline(nx.DiGraph):
         endresult = self.node[toponodes[-1]]['func'](inputs)
         return endresult
 
-
+    # Adds the node to list of functions (APIS) to start
+    # And calculate confidences
     def add_node(self, func, name ="", **kwargs):
         if not name:
             name = func.__name__
         super(Pipeline, self).add_node(name, func=func, **kwargs)
 
-# The different parts of louie
+# The different parts of louie i.e. bots
 LOC_TOKEN = 'MI3ND56G2NZELC5VWRNCK3MOEVK5ADD5'
 FACT_TOKEN = 'WJVG4KBWP7E7NCBKFPODXAD5WJAS2ZHR'
 EVENT_TOKEN = '5LJDN3AFRHGYYSIY35JTF2ZTY2H5EFZH'
 CONVERSE_TOKEN = '4HL7KZR3G6DK4ZGNLNODRZNZQZCWIC3B'
 
+# Makes a WIT client for each bot that you can access
 LOC = Wit(access_token=LOC_TOKEN)
 FACT = Wit(access_token=FACT_TOKEN)
 EVENT = Wit(access_token=EVENT_TOKEN)
 CONVERSE = Wit(access_token=CONVERSE_TOKEN)
 
+# Ease of access to each bot
 bot_indices = {
     'loc' : 0,
     'fact' : 1,
@@ -209,6 +237,9 @@ bot_indices = {
 
 numbots = len(bot_indices.keys())
 
+# Hardcoded user_name and location
+# Can be extended to any location and
+# Any Facebook User
 user_context = {
     'user1' : {
         'location' : (35.188,-111.653)
@@ -235,6 +266,10 @@ def node(func):
     wrapper.__name__ = func.__name__
     return wrapper
 
+'''
+Functions to query each API and return appropriate values
+'''
+
 @node
 def start(messagedata):
     data = {}
@@ -248,31 +283,35 @@ def start(messagedata):
     user_data(data)
     return data
 
+# Grabs the entiries for LOCATION bot
 @node
 def run_loc(data):
     text = user_data.data['text']
     wit_response = LOC.message(text)
     return 'loc', wit_response['entities']
 
+# Grabs the entiries for FACT bot
 @node
 def run_fact(data):
     text = user_data.data['text']
     wit_response = FACT.message(text)
     return 'fact', wit_response['entities']
 
+# Grabs the entiries for EVENTS bot
 @node
 def run_event(data):
     text = user_data.data['text']
     wit_response = EVENT.message(text)
     return 'event', wit_response['entities']
 
-
+# Grabs the entities for the CONVERSE bot
 @node
 def run_converse(data):
     text = user_data.data['text']
     wit_response = CONVERSE.message(text)
     return 'converse', wit_response['entities']
 
+# Returns all of the bots merged together
 @node
 def union(vals):
     if len(edges) == 1:
@@ -281,6 +320,7 @@ def union(vals):
     edge_data = [edge['data'] for edge in edges]
     return edge_data
 
+# Grabs the confidence from each entities
 @node
 def get_confidences_from_entities(bot, entities):
     confidences = np.array([])
@@ -310,6 +350,7 @@ def get_confidences_from_entities(bot, entities):
 def user_data(data):
     user_data.data = data
 
+# Grabs the confidence and puts them inside the array: bot_conf_arr()
 @node
 def set_confidences(confidences):
     bot_conf_arr = np.zeros(numbots)
@@ -317,6 +358,8 @@ def set_confidences(confidences):
         bot_conf_arr[bot_indices[conf['bot']]] = conf['confidence']
     return bot_conf_arr
 
+# Runs a local search query using yelp, foursquare has also been run and is
+# Contained in the notebooks folder in the Prototypes notebook
 @node
 def local_search(confidences):
     key_bot = 'loc'
@@ -357,6 +400,8 @@ def local_search(confidences):
     confidence = confidences[bot_indices[key_bot]]*confidence
     return answer, confidence
 
+# Runs a fact based query using wolframalpha, should be extended to include
+# Wikipedia or something similar
 @node
 def wolfram_search(confidences):
     key_bot = 'fact'
@@ -371,8 +416,7 @@ def wolfram_search(confidences):
                 if pod['@title'] == 'Notable facts':
                     answer = pod['subpod']['plaintext'].split('\n')[0]
         else:
-            # return next(wolfclient.query(str(sentence)).results).text
-
+            # Wolfram's way of getting the 'best' result
             answer = next(query_result.results).text
 
     except Exception as e:
@@ -384,9 +428,7 @@ def wolfram_search(confidences):
     confidence = confidences[bot_indices[key_bot]]*confidence
     return answer, confidence
 
-
-
-
+# Puts all the API's together and gets the best answer based on confidence
 @node
 def converge_api_answers(results):
     print(results)
@@ -397,7 +439,10 @@ def converge_api_answers(results):
     return best_answer
 
 def build_pipeline(user_message):
+    # Intializes the Pipline() class
     G = Pipeline()
+
+    # Adds all the nodes to calculate the proper weights i.e. confidence
     G.add_node(start)
     G.add_node(run_event)
     G.add_node(run_converse)
@@ -412,28 +457,35 @@ def build_pipeline(user_message):
     G.add_node(wolfram_search)
     G.add_node(converge_api_answers)
 
+    # Connects start to each API node
     G.add_edge('start', 'run_event')
     G.add_edge('start', 'run_loc')
     G.add_edge('start', 'run_converse')
     G.add_edge('start', 'run_fact')
 
+    # Connects each API node to the converge functions
     G.add_edge('run_event', 'event_converge')
     G.add_edge('run_loc', 'loc_converge')
     G.add_edge('run_converse', 'converse_converge')
     G.add_edge('run_fact', 'fact_converge')
 
+    # Connects each function to confidence function
     G.add_edge('event_converge', 'converge_confidences')
     G.add_edge('loc_converge', 'converge_confidences')
     G.add_edge('converse_converge', 'converge_confidences')
     G.add_edge('fact_converge', 'converge_confidences')
 
+    # Directs the API calls to the proper search i.e. local or Wikipedia
     G.add_edge('converge_confidences', 'wolfram_search')
     G.add_edge('converge_confidences', 'local_search')
 
+    # Pipes the confidences into the API function to achieve the best asnswer
     G.add_edge('wolfram_search', 'converge_api_answers')
     G.add_edge('local_search', 'converge_api_answers')
 
+    # Returns the node that is the best answer
     G.nodes()
 
+    # Calls the Pipeline on a certain message
     results = G(user_message)
     return results
