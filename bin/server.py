@@ -59,7 +59,7 @@ def messenger_post():
                     text = message['message']['text']
 
                     test_message = {
-                        'sender' : {str(fb_id) : 'user1'},
+                        'sender' : {'id' : 'user1'},
                         'text' : text
                     }
 
