@@ -514,7 +514,7 @@ def converge_api_answers(results):
     return best_answer
 
 # Intializes the Pipline() class
-louie_query = Pipeline()
+louie_query = Pipeline('louie')
 
 # Adds all the nodes to calculate the proper weights i.e. confidence
 louie_query.add_node(start)

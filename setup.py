@@ -6,7 +6,6 @@ import louie
 with open('README.md', 'r') as f:
     long_description = f.read()
 
-
 VERSION = louie.__version__
 
 def setup_package():
@@ -21,9 +20,6 @@ def setup_package():
         keywords = "chat bot smart city",
         url = "http://packages.python.org/louie",
         packages=find_packages(),
-        include_package_data=True,
-        package_data=None,
-        zip_safe=False,
         install_requires=[
             'pandas',
             'psycopg2',
@@ -43,6 +39,7 @@ def setup_package():
             'Programming Language :: Python :: 3.3',
             'Programming Language :: Python :: 3.4',
             'Programming Language :: Python :: 3.5',
+            'Programming Language :: Python :: 3.6'
         ],
     )
 
