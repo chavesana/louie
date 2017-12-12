@@ -105,7 +105,7 @@ def test_confidences():
     suspected_answers = [{'bot': 'event', 'confidence': 0.8797314436}, {'bot': 'loc', 'confidence': 0.81477845057046483}, {'bot': 'converse', 'confidence': 0.72263869665801228}, {'bot': 'fact', 'confidence': 0.83813290806322371}]
 
     if(locconf == suspected_answers[0] and convconf == suspected_answers[1] and eventconf == suspected_answers[2] and factconf == suspected_answers[3]):
-        asset True
+        assert True
 
     else:
         print(locconf)
