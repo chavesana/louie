@@ -9,7 +9,6 @@ import facebook
 import geocoder
 from random import *
 
-
 # __all__ = ['wolfram_search', 'witclient', 'wolfclient', 'yelpclient', 'FB_PAGE_TOKEN']
 
 WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'

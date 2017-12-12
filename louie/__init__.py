@@ -1,4 +1,14 @@
-from louie.search import *
-from louie.yelpfusion import *
-
 __version__ = '0.0.1'
+
+from wit import Wit
+
+# The different parts of louie
+LOC_TOKEN = 'MI3ND56G2NZELC5VWRNCK3MOEVK5ADD5'
+FACT_TOKEN = 'WJVG4KBWP7E7NCBKFPODXAD5WJAS2ZHR'
+EVENT_TOKEN = '5LJDN3AFRHGYYSIY35JTF2ZTY2H5EFZH'
+CONVERSE_TOKEN = '4HL7KZR3G6DK4ZGNLNODRZNZQZCWIC3B'
+
+LOC = Wit(access_token=LOC_TOKEN)
+FACT = Wit(access_token=FACT_TOKEN)
+EVENT = Wit(access_token=EVENT_TOKEN)
+CONVERSE = Wit(access_token=CONVERSE_TOKEN)
