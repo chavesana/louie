@@ -31,7 +31,8 @@ def plot_graph(graph, ax=None, cmap='coolwarm', node_size=300, node_color='.6',l
     font_size : int
                 The font size for labels
 
-    font_color :
+    font_color : str
+
 
     Returns
     -------
