@@ -3,6 +3,7 @@ from sys import argv
 from bottle import Bottle, request, debug
 from wit import Wit
 import wolframalpha as wolf
+import requests
 import louie
 import os
 
@@ -91,7 +92,7 @@ def fb_message(sender_id, text):
     # Setup the query string with your PAGE TOKEN
     qs = 'access_token=' + FB_PAGE_TOKEN
     # Send POST request to messenger
-    resp = request.post('https://graph.facebook.com/me/messages?' + qs, json=data)
+    resp = requests.post('https://graph.facebook.com/me/messages?' + qs, json=data)
     print("content type:", type(resp.content))
     return resp.content.decode("utf-8")
 
