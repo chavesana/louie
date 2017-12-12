@@ -29,10 +29,6 @@ def test_two():
         print('Oh no, got response: ', json_obj['entities'])
         assert False
 
-
-print('TESTS')
-print()
-
 test_confidences = [
     {'bot' : 'loc', 'confidence' : .9},
     {'bot' : 'converse', 'confidence' : .8}
@@ -74,8 +70,6 @@ def test_start():
     else:
         assert False
 
-print()
-
 def test_bot_calls():
     print('TESTING BOT CALLS')
     suspected_answers = []
@@ -101,10 +95,8 @@ def test_bot_calls():
         assert False
 
 
-print()
-
 def test_confidences():
-print('TESTING CONFIDENCE CONVERGENCE')
+    print('TESTING CONFIDENCE CONVERGENCE')
     locconf = get_confidences_from_entities("event", loc[1])
     convconf = get_confidences_from_entities("loc", converse[1])
     eventconf = get_confidences_from_entities("converse", event[1])
@@ -122,7 +114,6 @@ print('TESTING CONFIDENCE CONVERGENCE')
         print(factconf)
         assert False
 
-print()
 def test_apis():
     print('TESTING API CALLS')
     print(user_data.data)
