@@ -1,26 +1,24 @@
+
+import louie
+import wolframalpha as wolf
 import networkx as nx
 import numpy as np
+import traceback
+import sys
+import os
 # from matplotlib import pyplot as plt
 # import matplotlib
+from louie.yelpfusion import *
 from scipy.misc import imresize
 from collections import defaultdict, MutableMapping, OrderedDict
 from copy import deepcopy
 from wit import Wit
-import os
 from multiprocessing import Process, Queue
-import traceback
 from copy import deepcopy
-import louie
-import sys
-from louie import *
-import wolframalpha as wolf
-from louie.yelpfusion import YelpFusion
-from prompt_toolkit import prompt
-from prompt_toolkit.history import InMemoryHistory
+
 
 
 WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'
-
 FB_PAGE_TOKEN = 'EAAVWYdbX2BUBAJZBmlbIeZCoocO5CdRHY82VNs8drNbB0yNL5bj63K0ZCQqIqzAbrl0u2ollXrsFIiRMfebWAQmpF1sw2EsThg1TpDulsygqGkQQ7dcHZCZB6W6QGlejXKYEg0ObqZAOTXGqKe9exLf57ZCQW546Kh5W66lEOvaGjX3ffruHXXT'
 FB_VERIFY_TOKEN = 'hello'
 WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
@@ -398,7 +396,7 @@ def converge_api_answers(results):
         best_answer = 'no answer'
     return best_answer
 
-def build_pipeline(test_message):
+def build_pipeline(user_message):
     G = Pipeline()
     G.add_node(start)
     G.add_node(run_event)
@@ -437,6 +435,5 @@ def build_pipeline(test_message):
 
     G.nodes()
 
-    results = G(test_message)
-
+    results = G(user_message)
     return results

@@ -1,31 +1,19 @@
 #!/usr/bin/env python
-import os
-import sys
-import requests
 from sys import argv
 from bottle import Bottle, request, debug
+from wit import Wit
 import wolframalpha as wolf
-import louie as lou
-from louie import *
-import wolframalpha as wolf
-
+import louie
 
 # Setup Bottle Server
 debug(True)
 app = Bottle()
 
 WIT_TOKEN = 'VNKUNTRL2Z4U35HVPDBUZRQAHPVALBMA'
-
 FB_PAGE_TOKEN = 'EAAVWYdbX2BUBAJZBmlbIeZCoocO5CdRHY82VNs8drNbB0yNL5bj63K0ZCQqIqzAbrl0u2ollXrsFIiRMfebWAQmpF1sw2EsThg1TpDulsygqGkQQ7dcHZCZB6W6QGlejXKYEg0ObqZAOTXGqKe9exLf57ZCQW546Kh5W66lEOvaGjX3ffruHXXT'
 FB_VERIFY_TOKEN = 'hello'
 WOLFRAM_TOKEN = '64J9LH-5Q8357GKRK'
 GOOGS_PLACES_TOKEN = 'AIzaSyABRaPH0tzxRT_sVBkkGr5zWkbN3y7jN9Q'
-YELP_APP_ID = 'xqTzjWmr8PIUqv9gkQLWBw'
-YELP_CLIENT_SECRET = '4YtXv1OVhISGWM4Eb1ji7YJc0igSEAOkvXXyiH3KA0tNKZmGhUoh9M2VAlexfIST'
-
-witclient = Wit(access_token=WIT_TOKEN)
-wolfclient = wolf.Client(WOLFRAM_TOKEN)
-yelpclient = YelpFusion(YELP_APP_ID, YELP_CLIENT_SECRET)
 
 
 # Facebook Messenger GET Webhook
@@ -70,11 +58,12 @@ def messenger_post():
                     text = message['message']['text']
 
                     test_message = {
-                        'sender' : {fb_id : 'User'},
+                        'sender' : {str(fb_id) : 'user1'},
                         'text' : text
                     }
 
-                    results = build_pipeline(test_message)
+                    results = louie.build_pipeline(test_message)
+
                     # Let's forward the message to the Wit.ai Bot Engine
                     # We handle the response in the function send()
                     print('MESSAGE RESPONSE = ', str(results))
