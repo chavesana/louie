@@ -4,6 +4,7 @@ from bottle import Bottle, request, debug
 from wit import Wit
 import wolframalpha as wolf
 import louie
+import os
 
 # Setup Bottle Server
 debug(True)
